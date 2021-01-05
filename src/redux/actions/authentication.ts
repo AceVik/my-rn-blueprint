@@ -13,7 +13,7 @@ export const renewApiToken = createAsyncAction(
   '@@API_TOKEN_AUTH/REQUEST_SUCCESS', 
   '@@API_TOKEN_AUTH/REQUEST_FAILURE', 
   '@@API_TOKEN_AUTH/REQUEST_CANCEL'
-)<undefined, Session, { error: any; }, undefined>();
+)<undefined, Session, { error: unknown; }, undefined>();
 
 export const logout = createAction('@@AUTH/RESET')<undefined>();
 

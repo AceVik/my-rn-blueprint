@@ -1,100 +1,57 @@
-import { createLogic } from 'redux-logic';
-import { getType } from 'typesafe-actions';
+import { getType, ActionType } from 'typesafe-actions';
 import {
   authenticate,
-  renewApiToken,
-  logout
+  SessionAction
 } from '../actions';
-import { DenepndencyType } from '../index';
+import { useQuery } from 'react-query';
+import { createLogic } from '../index';
+
+import { Session } from '../../entities';
 
 // AUTHENTICATE
 
-const authenticateLogic = createLogic({
+export const authenticateLogic = createLogic<ActionType<typeof authenticate.request>, SessionAction>({
   type: getType(authenticate.request),
-  process({ action, api }: DenepndencyType, dispatch: Function, done: Function) {
-      api.authenticate(action.payload.username, action.payload.password).then((response: any) => {
-          const session: Session = response.data;
-          dispatch(authenticate.success(session));
-      }).catch((e: any) => {
-          dispatch(authenticate.failure(e));
-      }).finally(() => done());
+  process({ action, dispatch }, done) {
+
+    const {
+      username,
+      password
+    } = action.payload;
+
+    const { data, isError, error } = useQuery(getType(authenticate.request), async (): Promise<Session> => ({
+      // Make an api call
+      uid: 1,
+      username: username,
+      roles: ['user'],
+      api_token: password,
+      api_token_expires: 10000
+    }));
+
+    if (isError) {
+      dispatch(authenticate.failure({ error }));
+    } else {
+      dispatch(authenticate.success(data!));
+    }
+
+    done();
   }
 });
 
-const authenticationSuccessLogic = createLogic({
+export const authenticateSuccessLogic = createLogic<ActionType<typeof authenticate.success>>({
   type: getType(authenticate.success),
-  process({ notificationSystem, action, i18n, redirectTo }: DenepndencyType) {
-
-      redirectTo('/');
-
-      notificationSystem.addNotification({
-          message: i18n.t('login_success', [ action.payload.username ]),
-          level: 'success'
-      });
+  process({ action, navigator }, done) {
+    navigator?.navigate('Home');
+    // display success message for action.payload.username
+    done();
   }
 });
 
-const authenticationFailureLogic = createLogic({
+export const authenticateFailureLogic = createLogic({
   type: getType(authenticate.failure),
-  process({ notificationSystem, i18n }: DenepndencyType) {
-      notificationSystem.addNotification({
-          message: i18n.t('login_failed'),
-          level: 'error'
-      });
+  process({ navigator }, done) {
+    // navigator?.navigate('Login'); if required
+    // display error message
+    done();
   }
 });
-
-// RENEW API TOKEN
-
-const renewApiTokenLogic = createLogic({
-  type: getType(renewApiToken.request),
-  process({ api, getState }: DenepndencyType, dispatch: Function, done: Function) {
-      const apiToken = getState().session.api_token;
-
-      if(!apiToken) {
-          dispatch(logout());
-          return;
-      }
-
-      api.renewApiToken(apiToken).then((response: any) => {
-          const session: Session = response.data;
-          dispatch(renewApiToken.success(session));
-      }).catch((e: any) => {
-          dispatch(renewApiToken.failure(e));
-      }).finally(() => done());
-  }
-});
-
-const renewApiTokenFailureLogic = createLogic({
-  type: getType(renewApiToken.failure),
-  process({ notificationSystem, i18n }: DenepndencyType, dispatch, done) {
-      notificationSystem.addNotification({
-          message: i18n.t('session_expired'),
-          level: 'error'
-      });
-
-      dispatch(logout());
-
-      done();
-  }
-});
-
-// LOGOUT
-
-const logoutLogic = createLogic({
-  type: getType(logout),
-  process({ redirectTo }: DenepndencyType) {
-      redirectTo('/login');
-  }
-});
-
-export const sessionLogics = [
-  authenticateLogic,
-  authenticationSuccessLogic,
-  authenticationFailureLogic,
-
-  renewApiTokenLogic,
-  renewApiTokenFailureLogic,
-
-  logoutLogic
-];

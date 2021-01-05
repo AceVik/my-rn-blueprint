@@ -1,16 +1,19 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { useSelector } from 'react-redux';
+import { AuthNavigator } from './AuthNavigator';
+import { AppNavigator } from './AppNavigator';
+import { StateType, SessionState } from '../redux';
 
-type RootStackParamList = {
-  Home: undefined;
-};
+export const RootNavigator : React.FC = () => {
+  const sessionState = useSelector<StateType, SessionState>(state => state.session);
 
-const RootStack = createStackNavigator<RootStackParamList>();
+  if (!sessionState.authenticated) {
+    return (
+      <AuthNavigator />
+    );
+  }
 
-export function RootNavigator() {
   return (
-    <RootStack.Navigator initialRouteName="Home">
-      <RootStack.Screen name="Home" component={'a'} />
-    </RootStack.Navigator>
+    <AppNavigator />
   );
 }
