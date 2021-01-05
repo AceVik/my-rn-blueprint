@@ -6,7 +6,7 @@ export const authenticate = createAsyncAction(
   '@@AUTH/REQUEST_SUCCESS', 
   '@@AUTH/REQUEST_FAILURE', 
   '@@AUTH/REQUEST_CANCEL'
-)<UserCredentials, Session, { error: any; }>();
+)<UserCredentials, Session, unknown>();
 
 export const renewApiToken = createAsyncAction(
   '@@API_TOKEN_AUTH/REQUEST', 

@@ -35,6 +35,10 @@ class DependencyInjectionDependencies {
   get navigator(): NavigationContainerRef | null {
     return store.getState().navigation.navigator;
   }
+
+  // authorizedClient: axiosClient
+  // unauthorizedClient: axiosClient
+  // ...
 }
 interface DependencyInjectionDefaultTypes<A = AnyAction> {
   action: A;

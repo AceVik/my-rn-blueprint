@@ -19,22 +19,19 @@ export const authenticateLogic = createLogic<ActionType<typeof authenticate.requ
       password
     } = action.payload;
 
-    const { data, isError, error } = useQuery(getType(authenticate.request), async (): Promise<Session> => ({
-      // Make an api call
-      uid: 1,
-      username: username,
-      roles: ['user'],
-      api_token: password,
-      api_token_expires: 10000
-    }));
-
-    if (isError) {
-      dispatch(authenticate.failure({ error }));
-    } else {
-      dispatch(authenticate.success(data!));
-    }
-
-    done();
+    // api call simulation
+    (new Promise<Session>(function (resolve, reject) {
+      resolve({
+        uid: 1,
+        username: username,
+        roles: ['user'],
+        api_token: password,
+        api_token_expires: 10000
+      });
+    }))
+      .then(data => dispatch(authenticate.success(data)))
+      .catch(error => dispatch(authenticate.failure(error)))
+      .finally(done);
   }
 });
 
