@@ -6,6 +6,7 @@ import { createLogic as _createLogic, createLogicMiddleware } from 'redux-logic'
 import { NavigationContainerRef } from '@react-navigation/native';
 import { TypeConstant } from 'typesafe-actions';
 
+import { ThemeState, themeReducer } from './reducers/themeReducer';
 import { SessionState, sessionReducer } from './reducers/sessionReducer';
 import { NavigationState, navigationReducer } from './reducers/navigationReducer';
 
@@ -16,6 +17,7 @@ import { NavigationState, navigationReducer } from './reducers/navigationReducer
 };*/
 
 const reducers = combineReducers({
+  theme: themeReducer,
   session: sessionReducer,
   navigation: navigationReducer
 });
@@ -23,6 +25,7 @@ const reducers = combineReducers({
 // const persistedReducer = persistReducer(persistConfig, reducers);
 
 export interface StateType {
+  theme: ThemeState;
   session: SessionState;
   navigation: NavigationState;
 }

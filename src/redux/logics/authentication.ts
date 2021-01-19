@@ -3,7 +3,6 @@ import {
   authenticate,
   SessionAction
 } from '../actions';
-import { useQuery } from 'react-query';
 import { createLogic } from '../index';
 
 import { Session } from '../../entities';
