@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ViewProps, View, Text, StyleSheet } from 'react-native';
 import { styled } from '@theme/index';
 
-export const EmptyContainer = styled.View`
+const EmptyContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;

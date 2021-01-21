@@ -11,7 +11,7 @@ export interface ThemeState {
 }
 
 export const INITIAL_THEME_STATE: ThemeState = {
-    selectedTheme: 'light'
+    selectedTheme: 'light',
 };
 
 export const themeReducer = (
