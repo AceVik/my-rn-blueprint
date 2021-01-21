@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {AuthStackParamList} from '@app/navigators/AuthNavigator';
 import {RouteProp} from '@react-navigation/native';
-import { styled } from "@theme/index";
+import { styled } from "@app/theme";
 
 interface Props {
     navigation: StackNavigationProp<AuthStackParamList, 'Login'>;
@@ -22,9 +22,6 @@ navigation: CompositeNavigationProp<
     StackNavigationProp<RequestNavigatorParamList, 'Login'>
   >;
 */
-
-export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
-
 
 const rn_styles = StyleSheet.create({
     box: {
@@ -45,7 +42,7 @@ const RNBox: React.FC = () => (
     <View style={rn_styles.box} />
 );
 
-export const LoginScreen: React.FC = () => {
+export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   return (
     <View style={{ flex: 1, width: '100%', height: '100%', flexDirection: 'row', justifyContent: 'space-evenly' }}>
       <StyledBox />
