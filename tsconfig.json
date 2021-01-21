@@ -11,6 +11,7 @@
     "isolatedModules": true,
     "baseUrl": "./",
     "paths": {
+      "@app/*": ["src/*"],
       "@theme/*": ["src/theme/*"],
       "@utils/*": ["src/utils/*"],
       "@redux/*": ["src/redux/*"],
